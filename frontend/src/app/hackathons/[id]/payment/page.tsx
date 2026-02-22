@@ -23,7 +23,8 @@ function PaymentContent({ id }: { id: string }) {
         try {
             if (teamId) {
                 // Ping backend to confirm payment
-                await fetch(`http://localhost:5000/api/hackathons/payment/${teamId}`, {
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+                await fetch(`${API_URL}/api/hackathons/payment/${teamId}`, {
                     method: 'POST'
                 });
             }

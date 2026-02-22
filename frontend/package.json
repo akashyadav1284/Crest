@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "eslint"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
     "@fontsource/outfit": "^5.2.8",

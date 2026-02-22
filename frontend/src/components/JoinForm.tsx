@@ -21,7 +21,8 @@ export function JoinForm() {
 
         try {
             // Send to Express Backend
-            const response = await fetch("http://localhost:5000/api/join", {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const response = await fetch(`${API_URL}/api/join`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(requestData),
