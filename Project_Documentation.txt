@@ -1,0 +1,101 @@
+================================================================================
+                    CREST CLUB HACKATHON REGISTRATION SYSTEM
+                                PROJECT DOCUMENTATION
+================================================================================
+
+1. INTRODUCTION & BEGINNING
+We started this project from scratch to build a futuristic, "Cyberpunk" themed 
+Event Management Website for the Crest Club. We wanted a seamless experience 
+for users to explore events and register for large-scale hackathons.
+
+2. INITIAL SETUP
+The project was split into two main parts:
+- A "frontend" folder for the user interface.
+- A "backend" folder for the server and database handling.
+
+3. TOOLS AND TECHNOLOGIES
+- Frontend: 
+  - Next.js (React Framework for structure and routing)
+  - Tailwind CSS (For styling the neon/hacker aesthetic)
+  - Framer Motion (For smooth animations and hover effects)
+- Backend:
+  - Node.js & Express.js (To build our own custom API)
+- Database:
+  - MongoDB (To store all the team registrations securely)
+
+4. FOLDER STRUCTURE
+/frontend
+  └─ /src
+      └─ /app
+          └─ /hackathons       <- Pages for event listing and registration flow
+      └─ /components           <- Reusable blocks like Navbars and Cards
+/backend
+  └─ /models                   <- Database schemas (how data should look)
+  └─ /routes                   <- API endpoints (how the frontend talks to the DB)
+  └─ server.js                 <- The main engine running the backend
+
+5. FRONTEND UI DESIGN
+We used a Dark Theme with "Glassmorphism" (translucent cards) and Neon 
+Blue/Magenta glows. The UI is broken into:
+- Listing Page: Cards showing available hackathons.
+- Details Page: Shows Event Dates, Venues, Sponsors, and Rulebook.
+- Registration Form: A sleek console-style form to enter team details.
+
+6. HACKATHON REGISTRATION FORM
+When a user clicks "Register Your Team", they are taken to a dedicated page 
+that asks for all their credentials to securely lock in their spot.
+
+7. USER DETAILS COLLECTED
+The form captures:
+- Full Name (Leader)
+- Registration Number
+- Course / Major
+- Year of Study
+- Email & Phone Number
+- Team Name & Team Members Count
+
+8. SENDING DATA TO BACKEND
+When the user clicks "Save Details", the Next.js frontend packages all those 
+inputs into a JSON object and sends an HTTP POST request to our Custom API
+running at `http://localhost:5000/api/hackathons/register`.
+
+9. MONGODB CONNECTION
+The backend runs a library called 'Mongoose'. When it receives the team data,
+Mongoose checks it against our `HackTeamSchema` to ensure no fields are missing, 
+and then securely connects to the local MongoDB database to save it.
+
+10. DATABASE STORAGE
+The data is successfully saved into a database named `crestDB`. Inside of that 
+database, there is a specific collection (like a spreadsheet tab) named 
+`hackteams` where every single registration is stored as a document.
+
+11. VIEWING DATA IN MONGODB COMPASS
+As the event organizer, you open the MongoDB Compass application on your PC, 
+connect to `localhost:27017`, open `crestDB`, and click on `hackteams`. Here 
+you can visually see and manage every single registered team in real-time!
+
+12. PAYMENT INTEGRATION
+After the data is saved, the user is automatically redirected to a Dummy 
+Payment Gateway. It shows their Order Summary and lets them "pretend" to pay 
+via UPI QR Code or Credit Card. Once they click 'Proceed', the backend updates 
+their database status from 'pending' to 'completed', and the user gets a 
+beautiful Digital Ticket Page.
+
+13. FULL WORKING FLOW
+User browses Events -> Clicks Register -> Fills Form -> Frontend sends to 
+Backend -> Backend saves to MongoDB -> User goes to Payment -> Backend marks 
+as Paid -> User downloads Digital Ticket.
+
+14. HOW TO RUN THE PROJECT LOCALLY
+To run the full stack system on a computer:
+- Open Terminal 1:
+  cd backend
+  node server.js
+- Open Terminal 2:
+  cd frontend
+  npm install
+  npm run dev
+- Launch MongoDB Server locally.
+- Open your browser to `http://localhost:3000`
+
+================================================================================
