@@ -1,7 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+
+interface Stat {
+    _id: string;
+    label: string;
+    value: string;
+}
 
 export function AboutSection() {
     const ref = useRef(null);
@@ -9,6 +15,22 @@ export function AboutSection() {
         target: ref,
         offset: ["start end", "end start"],
     });
+
+    const [stats, setStats] = useState<Stat[]>([]);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const apiUrl = "http://localhost:5000/api";
+                const res = await fetch(`${apiUrl}/stats`);
+                const data = await res.json();
+                setStats(data);
+            } catch (err) {
+                console.error("Failed to fetch stats");
+            }
+        };
+        fetchStats();
+    }, []);
 
     const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
     const opacity = useTransform(scrollYProgress, [0, 0.3, 0.8, 1], [0, 1, 1, 0]);
@@ -38,16 +60,30 @@ export function AboutSection() {
                         We focus on breaking the barriers between theoretical knowledge and real-world application through project-based learning.
                     </p>
 
-                    <div className="flex gap-4 pt-4">
-                        <div className="space-y-2">
-                            <h4 className="text-3xl font-bold font-outfit text-white">50+</h4>
-                            <p className="text-sm text-cyan-500 font-mono tracking-wider uppercase">Active Projects</p>
-                        </div>
-                        <div className="w-px h-16 bg-white/10" />
-                        <div className="space-y-2">
-                            <h4 className="text-3xl font-bold font-outfit text-white">200+</h4>
-                            <p className="text-sm text-magenta-500 font-mono tracking-wider uppercase">Members</p>
-                        </div>
+                    <div className="flex gap-8 pt-4">
+                        {stats.length > 0 ? (
+                            stats.map((stat, idx) => (
+                                <div key={stat._id} className="flex gap-8">
+                                    <div className="space-y-2">
+                                        <h4 className="text-3xl font-bold font-outfit text-white">{stat.value}</h4>
+                                        <p className={`text-sm font-mono tracking-wider uppercase ${idx % 2 === 0 ? 'text-cyan-500' : 'text-magenta-500'}`}>{stat.label}</p>
+                                    </div>
+                                    {idx < stats.length - 1 && <div className="w-px h-16 bg-white/10 mx-auto" />}
+                                </div>
+                            ))
+                        ) : (
+                            <>
+                                <div className="space-y-2">
+                                    <h4 className="text-3xl font-bold font-outfit text-white">50+</h4>
+                                    <p className="text-sm text-cyan-500 font-mono tracking-wider uppercase">Active Projects</p>
+                                </div>
+                                <div className="w-px h-16 bg-white/10" />
+                                <div className="space-y-2">
+                                    <h4 className="text-3xl font-bold font-outfit text-white">200+</h4>
+                                    <p className="text-sm text-magenta-500 font-mono tracking-wider uppercase">Members</p>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 
@@ -101,3 +137,4 @@ export function AboutSection() {
         </section>
     );
 }
+

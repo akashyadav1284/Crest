@@ -14,14 +14,14 @@ export function JoinForm() {
         const formData = new FormData(e.currentTarget);
         const requestData = {
             name: formData.get("name"),
-            regNo: formData.get("regNo"),
             email: formData.get("email"),
-            skillset: formData.get("skillset"),
+            department: formData.get("department"),
+            interestDomain: formData.get("interestDomain"),
         };
 
         try {
             // Send to Express Backend
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+            const API_URL = "http://localhost:5000";
             const response = await fetch(`${API_URL}/api/join`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -39,7 +39,7 @@ export function JoinForm() {
             }
         } catch (error) {
             console.error("Backend offline or error occurred:", error);
-            alert("Network Error: Could not connect to the backend server at localhost:5000.");
+            alert("Network Error: Could not connect to the backend server.");
         }
     };
 
@@ -89,30 +89,30 @@ export function JoinForm() {
                         </div>
 
                         <div className="space-y-1">
-                            <label className="text-xs uppercase tracking-widest text-white/50 font-mono">Registration Number</label>
-                            <input
-                                type="text"
-                                name="regNo"
-                                required
-                                className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all"
-                                placeholder="e.g. 12200000"
-                            />
-                        </div>
-
-                        <div className="space-y-1">
-                            <label className="text-xs uppercase tracking-widest text-white/50 font-mono">Comms Channel</label>
+                            <label className="text-xs uppercase tracking-widest text-white/50 font-mono">Email</label>
                             <input
                                 type="email"
                                 name="email"
                                 required
                                 className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-magenta-500 focus:shadow-[0_0_15px_rgba(217,70,239,0.3)] transition-all"
-                                placeholder="student@university.edu"
+                                placeholder="xyz@gmail.com"
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label className="text-xs uppercase tracking-widest text-white/50 font-mono">Primary Skillset</label>
-                            <select name="skillset" required defaultValue="" className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white/70 appearance-none focus:outline-none focus:border-cyan-500 focus:shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all">
+                            <label className="text-xs uppercase tracking-widest text-white/50 font-mono">Department</label>
+                            <input
+                                type="text"
+                                name="department"
+                                className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all"
+                                placeholder="e.g. Computer Science"
+                            />
+                        </div>
+
+
+                        <div className="space-y-1">
+                            <label className="text-xs uppercase tracking-widest text-white/50 font-mono">Interest Domain</label>
+                            <select name="interestDomain" defaultValue="" className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white/70 appearance-none focus:outline-none focus:border-cyan-500 focus:shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all">
                                 <option value="" disabled>Select Domain...</option>
                                 <option value="robotics">Robotics & Hardware</option>
                                 <option value="ai">Artificial Intelligence</option>
@@ -137,3 +137,4 @@ export function JoinForm() {
         </section>
     );
 }
+

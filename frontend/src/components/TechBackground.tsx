@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
@@ -83,16 +83,14 @@ function TechEnvironment() {
     const { scrollYProgress } = useScroll();
 
     // Make Grids transparent natively
-    import('react').then(({ useEffect }) => {
-        useEffect(() => {
-            if (gridRef1.current && gridRef2.current) {
-                (gridRef1.current.material as THREE.LineBasicMaterial).transparent = true;
-                (gridRef1.current.material as THREE.LineBasicMaterial).opacity = 0.15;
-                (gridRef2.current.material as THREE.LineBasicMaterial).transparent = true;
-                (gridRef2.current.material as THREE.LineBasicMaterial).opacity = 0.15;
-            }
-        }, []);
-    });
+    useEffect(() => {
+        if (gridRef1.current && gridRef2.current) {
+            (gridRef1.current.material as THREE.LineBasicMaterial).transparent = true;
+            (gridRef1.current.material as THREE.LineBasicMaterial).opacity = 0.15;
+            (gridRef2.current.material as THREE.LineBasicMaterial).transparent = true;
+            (gridRef2.current.material as THREE.LineBasicMaterial).opacity = 0.15;
+        }
+    }, []);
 
     // Generate arrays once
     const sphere = useRef(generateParticles(5000));

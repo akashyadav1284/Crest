@@ -7,10 +7,31 @@ export function HeroContent({ isBooted }: { isBooted: boolean }) {
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
+    const [heading, setHeading] = useState("INNOVATION STUDIO PRESENTS");
+    const [showContent, setShowContent] = useState(true);
+
     const rotateX = useTransform(y, [-500, 500], [10, -10]);
     const rotateY = useTransform(x, [-500, 500], [-10, 10]);
 
     useEffect(() => {
+        // Fetch Homepage Content
+        const fetchContent = async () => {
+            try {
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+                const res = await fetch(`${API_URL}/api/homepage`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data) {
+                        setHeading(data.heading);
+                        setShowContent(data.showContent);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch homepage data");
+            }
+        };
+        fetchContent();
+
         if (!isBooted) return;
         const handleMouseMove = (e: MouseEvent) => {
             x.set(e.clientX - window.innerWidth / 2);
@@ -29,24 +50,26 @@ export function HeroContent({ isBooted }: { isBooted: boolean }) {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0.85)_100%)] pointer-events-none -z-10" />
 
             {/* UPPER TEXT (Above Circle) */}
-            <motion.div
-                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                initial={{ opacity: 0, scale: 0.8, z: -100 }}
-                animate={{ opacity: 1, scale: 1, z: 0 }}
-                transition={{ duration: 1.5, delay: 2.5, ease: "easeOut" }}
-                className="absolute top-[15vh] w-full flex justify-center"
-            >
-                <div className="text-center" style={{ transform: "translateZ(50px)" }}>
-                    <motion.h2
-                        className="text-sm md:text-xl font-mono tracking-[0.5em] text-cyan-400 font-light mix-blend-screen drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]"
-                        initial={{ opacity: 0, y: 20, letterSpacing: "0.1em" }}
-                        animate={{ opacity: 1, y: 0, letterSpacing: "0.5em" }}
-                        transition={{ duration: 1.5, delay: 3, ease: "easeOut" }}
-                    >
-                        INNOVATION STUDIO PRESENTS
-                    </motion.h2>
-                </div>
-            </motion.div>
+            {showContent && (
+                <motion.div
+                    style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                    initial={{ opacity: 0, scale: 0.8, z: -100 }}
+                    animate={{ opacity: 1, scale: 1, z: 0 }}
+                    transition={{ duration: 1.5, delay: 2.5, ease: "easeOut" }}
+                    className="absolute top-[15vh] w-full flex justify-center"
+                >
+                    <div className="text-center" style={{ transform: "translateZ(50px)" }}>
+                        <motion.h2
+                            className="text-sm md:text-xl font-mono tracking-[0.5em] text-cyan-400 font-light mix-blend-screen drop-shadow-[0_0_10px_rgba(34,211,238,0.8)] uppercase"
+                            initial={{ opacity: 0, y: 20, letterSpacing: "0.1em" }}
+                            animate={{ opacity: 1, y: 0, letterSpacing: "0.5em" }}
+                            transition={{ duration: 1.5, delay: 3, ease: "easeOut" }}
+                        >
+                            {heading}
+                        </motion.h2>
+                    </div>
+                </motion.div>
+            )}
 
             {/* LOWER TEXT (Below Circle) */}
             <motion.div

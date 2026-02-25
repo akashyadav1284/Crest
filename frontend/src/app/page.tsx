@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { BootSequence } from "@/components/landing/BootSequence";
 import { MissionControl } from "@/components/landing/MissionControl";
+import { AnnouncementsBanner } from "@/components/landing/AnnouncementsBanner";
 import { AboutSection } from "@/components/AboutSection";
 import { DomainsSection } from "@/components/DomainsSection";
 import { TeamSection } from "@/components/TeamSection";
@@ -31,6 +32,9 @@ export default function Home() {
 
       {/* Interactive Mission Control Hero Dashboard */}
       <MissionControl isBooted={!isBooting} />
+
+      {/* Global Announcements */}
+      <AnnouncementsBanner />
 
       {/* Imported Sections */}
       <AboutSection />

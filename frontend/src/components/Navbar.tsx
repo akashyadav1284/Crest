@@ -49,6 +49,12 @@ export function Navbar() {
                         </a>
                     ))}
                     <a
+                        href="/admin/login"
+                        className="text-sm font-inter text-red-400 hover:text-red-300 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.8)] transition-all uppercase tracking-widest"
+                    >
+                        Admin
+                    </a>
+                    <a
                         href="#join"
                         className="px-6 py-2 rounded-full border border-magenta-500 text-magenta-500 hover:bg-magenta-500 hover:text-white hover:shadow-[0_0_20px_rgba(217,70,239,0.5)] transition-all uppercase text-sm tracking-widest"
                     >
@@ -83,6 +89,13 @@ export function Navbar() {
                                 {link.name}
                             </a>
                         ))}
+                        <a
+                            href="/admin/login"
+                            onClick={() => setMenuOpen(false)}
+                            className="text-lg font-inter text-red-500 hover:text-red-400 transition-all uppercase tracking-widest"
+                        >
+                            Admin
+                        </a>
                         <a
                             href="#join"
                             onClick={() => setMenuOpen(false)}

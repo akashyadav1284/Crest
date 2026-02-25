@@ -24,7 +24,7 @@ export function Footer() {
                             </p>
                         </div>
                         <div className="space-y-2">
-                            <h4 className="text-white font-bold uppercase tracking-widest font-mono text-xs text-magenta-400">Contact Us</h4>
+                            <h4 className="text-white font-bold uppercase tracking-widest font-mono text-xs text-magenta-400">Technical Support</h4>
                             <p className="text-white/50 text-sm leading-relaxed">
                                 Email: akasxhyadav@gmail.com<br />
                                 Phone: +91 9467658854

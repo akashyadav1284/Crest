@@ -1,33 +1,31 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { HackathonCard } from "@/components/hackathon/HackathonCard";
 
-// Mock data based on the user request
-const hackathons = [
-    {
-        id: "hack-and-build-2026",
-        name: "Hack and Build 2026",
-        date: "Feb 25-28, 2026",
-        duration: "24 Hours Non-Stop",
-        venue: "LPU Campus, Punjab",
-        participants: "500+ Innovators",
-        description: "Join the most ambitious hackathon of the year. Build the future with AI, Web3, robotics, and immersive tech. We are looking for passionate developers to create groundbreaking solutions.",
-        organizer: "Crest Club"
-    },
-    {
-        id: "inferno-verse-2025",
-        name: "Inferno Verse 2025",
-        date: "October 10-12, 2025",
-        duration: "36 Hours Extreme",
-        venue: "Virtual Event",
-        participants: "1000+ Global Devs",
-        description: "A fully immersive online Web3 and AI hackathon. Dive into the metaverse and build next-generation decentralized applications and AI-driven platforms.",
-        organizer: "Crest Club"
-    }
-];
-
 export default function HackathonsListingPage() {
+    const [hackathons, setHackathons] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchHackathons = async () => {
+            try {
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+                const res = await fetch(`${apiUrl}/api/hackathons/admin`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setHackathons(data);
+                }
+            } catch (err) {
+                console.error("Failed to load hackathons");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHackathons();
+    }, []);
     return (
         <div className="container mx-auto px-6 py-12 relative z-10">
             {/* Header */}
@@ -58,11 +56,28 @@ export default function HackathonsListingPage() {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                {hackathons.map((hackathon, idx) => (
-                    <HackathonCard key={hackathon.id} {...hackathon} />
-                ))}
-            </div>
+            {loading ? (
+                <div className="text-white/50 text-center animate-pulse py-10">Initializing Hackathon Matrix...</div>
+            ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    {hackathons.map((hackathon: any) => (
+                        <HackathonCard
+                            key={hackathon._id}
+                            id={hackathon._id}
+                            name={hackathon.hackathonName}
+                            date={hackathon.date}
+                            duration={hackathon.duration}
+                            venue={hackathon.venue}
+                            participants={hackathon.participants}
+                            description={hackathon.description}
+                            organizer={hackathon.organizer}
+                        />
+                    ))}
+                    {hackathons.length === 0 && (
+                        <div className="col-span-full text-center py-10 text-white/40 italic">No Active Hackathons Found.</div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

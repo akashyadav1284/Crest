@@ -10,9 +10,16 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.use('/api/auth', require('./routes/auth'));
 app.use('/api/events', require('./routes/events'));
 app.use('/api/join', require('./routes/join'));
 app.use('/api/hackathons', require('./routes/hackathon'));
+app.use('/api/hackathons/admin', require('./routes/hackathons-admin'));
+app.use('/api/team', require('./routes/team'));
+app.use('/api/stats', require('./routes/stats'));
+app.use('/api/homepage', require('./routes/homepage'));
+app.use('/api/domains', require('./routes/domains'));
+app.use('/api/announcements', require('./routes/announcements'));
 
 // Connect to MongoDB
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/crestDB';

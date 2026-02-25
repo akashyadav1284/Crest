@@ -2,10 +2,11 @@ const mongoose = require('mongoose');
 
 const JoinRequestSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    registrationNumber: { type: String, required: true },
     email: { type: String, required: true },
-    skillset: { type: String, required: true },
-    status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+    department: { type: String },
+    interestDomain: { type: String },
+    requestStatus: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+    remarks: { type: String },
     createdAt: { type: Date, default: Date.now }
 });
 

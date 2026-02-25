@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
 
-const EventSchema = new mongoose.Schema({
-    eventTitle: { type: String, required: true },
+const HackathonSchema = new mongoose.Schema({
+    hackathonName: { type: String, required: true },
     description: { type: String, required: true },
     date: { type: String, required: true },
-    time: { type: String, required: true },
+    duration: { type: String, required: true },
     venue: { type: String, required: true },
+    participants: { type: String, required: true },
+    organizer: { type: String, required: true },
     status: { type: String, enum: ['Upcoming', 'Ongoing', 'Completed'], default: 'Upcoming' },
     registrationLink: { type: String },
-    imageURL: { type: String },
-    color: { type: String, enum: ['cyan', 'magenta', 'yellow', 'green'], default: 'cyan' },
+    bannerImage: { type: String },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Event', EventSchema);
+module.exports = mongoose.model('Hackathon', HackathonSchema);
