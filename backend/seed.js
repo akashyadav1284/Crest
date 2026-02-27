@@ -1,128 +1,220 @@
-// Seed script to migrate hardcoded frontend data to MongoDB
+// Secure Database Seeding Script designed for MongoDB Atlas Initialization
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const bcrypt = require('bcryptjs');
 
-// Load env vars
+// Load environment variables
 dotenv.config();
 
-// Connect to MongoDB
+// Connect to MongoDB Atlas
 mongoose.set('strictQuery', false);
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/crestDB')
-    .then(() => console.log('MongoDB Connected for Seeding'))
-    .catch(err => {
-        console.error('MongoDB Connection Error:', err.message);
-        process.exit(1);
-    });
+const uri = process.env.MONGO_URI;
 
-// Import Models
+if (!uri) {
+    console.error('FATAL: MONGO_URI is completely missing.');
+    process.exit(1);
+}
+
+// Import all required Models
+const Admin = require('./models/Admin');
 const Domain = require('./models/Domain');
 const Event = require('./models/Event');
-const Hackathon = require('./models/Hackathon'); // We'll create this model next
+const Hackathon = require('./models/Hackathon');
+const Announcement = require('./models/Announcement');
+const SiteStat = require('./models/SiteStat');
+const User = require('./models/User');
 
-const seedData = async () => {
+const seedDatabase = async () => {
     try {
-        console.log('Clearing existing seeded collections (optional)...');
-        // await Domain.deleteMany(); // Uncomment if you want to flush Domains first
+        await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
+        console.log('✅ Connected to MongoDB Atlas correctly for Seeding.');
 
-        console.log('Seeding Core Domains...');
-        const domains = [
-            { title: "Robotics", icon: "<Cpu size={32} />", colorTheme: "cyan", description: "Automated hardware systems.", order: 1 },
-            { title: "Artificial Intelligence", icon: "<BrainCircuit size={32} />", colorTheme: "magenta", description: "Machine learning & neural networks.", order: 2 },
-            { title: "Blockchain", icon: "<Blocks size={32} />", colorTheme: "yellow", description: "Decentralized Web3 architectures.", order: 3 },
-            { title: "AR / VR", icon: "<View size={32} />", colorTheme: "green", description: "Immersive spatial computing.", order: 4 },
-            { title: "Internet of Things", icon: "<Radio size={32} />", colorTheme: "cyan", description: "Connected smart devices.", order: 5 },
-            { title: "Web Development", icon: "<Code size={32} />", colorTheme: "magenta", description: "High-performance full-stack web apps.", order: 6 },
-        ];
-
-        // Only insert if collection is empty to prevent duplicates on rerun
-        const existingDomains = await Domain.countDocuments();
-        if (existingDomains === 0) {
-            await Domain.insertMany(domains);
-            console.log('✅ Core Domains Seeded');
-        } else {
-            console.log(`⚠️ Domains collection already has ${existingDomains} records. Skipping seeding.`);
+        // 1. SAFETY CHECK
+        const adminCount = await Admin.countDocuments();
+        if (adminCount > 0) {
+            console.warn('⚠️ WARNING: The database already contains Admin records.');
+            console.warn('Aborting seed script to prevent overwriting production data.');
+            process.exit(0);
         }
 
-        console.log('Seeding Dummy Events...');
-        const events = [
+        console.log('🚀 Initiating Database Population Sequence...');
+
+        // 2. SEED ADMIN ACCOUNT
+        console.log('-> Creating Secure Super Admin...');
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassKey = await bcrypt.hash('340515@1284$', salt);
+        await Admin.create({
+            adminId: 'akash1284',
+            hashedPassKey: hashedPassKey,
+            role: 'superadmin',
+            accessLevel: 5,
+            isActive: true
+        });
+
+        // 3. SEED 6 CORE DOMAINS
+        console.log('-> Populating 6 Core Domains...');
+        const domains = [
             {
-                eventTitle: "AI Hackathon 2026",
-                description: "Build the future of Artificial Intelligence in 48 hours.",
-                date: "Oct 24, 2026",
-                time: "10:00 AM",
-                venue: "LPU Main Campus",
-                status: "Upcoming",
-                color: "cyan"
+                title: 'Robotics & AI',
+                quote: 'Engineering intelligence into motion — building machines that think, adapt, and evolve.',
+                description: 'Robotics & AI focuses on intelligent automation, autonomous systems, humanoid robotics, and real-world AI integration.',
+                icon: 'Robot',
+                colorTheme: 'cyan',
+                order: 1
             },
             {
-                eventTitle: "Web3 Workshop",
-                description: "Deep dive into Smart Contracts and DApps.",
-                date: "Nov 15, 2026",
-                time: "2:00 PM",
-                venue: "Virtual Event",
-                status: "Upcoming",
-                color: "magenta"
+                title: 'Artificial Intelligence & Machine Learning',
+                quote: 'Teaching machines to learn, reason, and redefine the future.',
+                description: 'AI & ML domain focuses on deep learning, neural networks, predictive modeling, generative AI, and intelligent systems.',
+                icon: 'BrainCircuit',
+                colorTheme: 'magenta',
+                order: 2
             },
             {
-                eventTitle: "Robotics Seminar",
-                description: "The evolution of automated and autonomous systems.",
-                date: "Sep 05, 2026",
-                time: "11:00 AM",
-                venue: "Auditorium 1",
-                status: "Completed",
-                color: "green"
+                title: 'Cybersecurity',
+                quote: 'Securing the digital frontier — defending systems before threats even emerge.',
+                description: 'Cybersecurity domain covers ethical hacking, penetration testing, SOC systems, cryptography, and digital defense strategies.',
+                icon: 'ShieldAlert',
+                colorTheme: 'yellow',
+                order: 3
+            },
+            {
+                title: 'Cloud Computing',
+                quote: 'Powering the world from invisible infrastructure.',
+                description: 'Cloud computing focuses on scalable systems, DevOps pipelines, distributed computing, and cloud-native architecture.',
+                icon: 'Cloud',
+                colorTheme: 'cyan',
+                order: 4
+            },
+            {
+                title: 'Aerospace Innovation',
+                quote: 'Beyond boundaries — innovating for skies and space.',
+                description: 'Aerospace domain works on UAVs, drone tech, propulsion systems, and space-grade embedded systems.',
+                icon: 'Rocket',
+                colorTheme: 'magenta',
+                order: 5
+            },
+            {
+                title: 'Electronics & Embedded Systems',
+                quote: 'From circuits to intelligence — hardware that drives innovation.',
+                description: 'Electronics domain builds IoT devices, PCB systems, microcontroller-based innovations, and smart hardware.',
+                icon: 'Cpu',
+                colorTheme: 'yellow',
+                order: 6
             }
         ];
+        await Domain.insertMany(domains);
 
-        // Check if events already exist
-        const existingEventsCount = await Event.countDocuments({ eventTitle: "AI Hackathon 2026" });
-        if (existingEventsCount === 0) {
-            await Event.insertMany(events);
-            console.log('✅ Events Seeded');
-        } else {
-            console.log('⚠️ Events already exist. Skipping seeding.');
-        }
-
-        console.log('Seeding Hackathons...');
+        // 4. SEED HACKATHONS
+        console.log('-> Seeding Hackathons...');
         const hackathons = [
             {
-                hackathonName: "Hack and Build 2026",
-                description: "Join the most ambitious hackathon of the year. Build the future with AI, Web3, robotics, and immersive tech. We are looking for passionate developers to create groundbreaking solutions.",
-                date: "Feb 25-28, 2026",
-                duration: "24 Hours Non-Stop",
-                venue: "LPU Campus, Punjab",
-                participants: "500+ Innovators",
-                organizer: "Crest Club",
-                status: "Upcoming"
+                hackathonName: 'CREST TechStorm 2026',
+                theme: 'AI + Cybersecurity',
+                mode: 'Hybrid',
+                date: 'March 20–22, 2026',
+                duration: '48 Hours',
+                registrationOpen: true,
+                prizePool: '₹50,000',
+                description: 'A 48-hour innovation sprint solving real-world AI and security challenges.',
+                venue: 'LPU Main Campus & Online',
+                participants: 'Open to All',
+                participantsLimit: 500,
+                organizer: 'CREST Club',
+                status: 'Upcoming'
             },
             {
-                hackathonName: "Inferno Verse 2025",
-                description: "A fully immersive online Web3 and AI hackathon. Dive into the metaverse and build next-generation decentralized applications and AI-driven platforms.",
-                date: "October 10-12, 2025",
-                duration: "36 Hours Extreme",
-                venue: "Virtual Event",
-                participants: "1000+ Global Devs",
-                organizer: "Crest Club",
-                status: "Completed"
+                hackathonName: 'CloudNova BuildFest',
+                theme: 'Cloud + DevOps',
+                mode: 'Online',
+                date: 'April 10–11, 2026',
+                duration: '24 Hours',
+                registrationOpen: true,
+                prizePool: '₹30,000',
+                description: 'Build scalable cloud-native apps and compete globally.',
+                venue: 'Virtual Build Platform',
+                participants: 'Global Students',
+                participantsLimit: 1000,
+                organizer: 'CREST Cloud Wing',
+                status: 'Upcoming'
             }
         ];
+        await Hackathon.insertMany(hackathons);
 
-        // Ensure Hackathon model is loaded
-        const existingHacksCount = await Hackathon.countDocuments();
-        if (existingHacksCount === 0) {
-            await Hackathon.insertMany(hackathons);
-            console.log('✅ Hackathons Seeded');
-        } else {
-            console.log(`⚠️ Hackathons collection already has ${existingHacksCount} records. Skipping seeding.`);
-        }
+        // 5. SEED EVENTS
+        console.log('-> Seeding Events...');
+        const events = [
+            {
+                eventTitle: 'AI Workshop – Neural Networks Deep Dive',
+                description: 'Learn how to build CNNs and RNNs from scratch without libraries.',
+                date: 'April 5, 2026',
+                time: '2:00 PM',
+                venue: 'Block 32, Auditorium',
+                speaker: 'Dr. John Doe',
+                mode: 'Offline',
+                status: 'Upcoming',
+                color: 'magenta',
+                isActive: true
+            },
+            {
+                eventTitle: 'Cybersecurity Bootcamp – Ethical Hacking Basics',
+                description: 'Hands-on session on Kali Linux, BurpSuite, and network penetration.',
+                date: 'April 15, 2026',
+                time: '10:00 AM',
+                venue: 'Virtual Discord Stage',
+                speaker: 'Alice Security',
+                mode: 'Online',
+                status: 'Upcoming',
+                color: 'yellow',
+                isActive: true
+            },
+            {
+                eventTitle: 'Cloud Deployment Session – From Code to Production',
+                description: 'Deploying robust scalable architectures using AWS and Docker.',
+                date: 'May 1, 2026',
+                time: '11:00 AM',
+                venue: 'Block 14, Room 201',
+                speaker: 'AWS Cloud Expert',
+                mode: 'Hybrid',
+                status: 'Upcoming',
+                color: 'cyan',
+                isActive: true
+            }
+        ];
+        await Event.insertMany(events);
 
-        console.log('🎉 Database Seeding Completed!');
+        // 6. SEED ANNOUNCEMENTS
+        console.log('-> Broadcasting Announcements...');
+        const announcements = [
+            { title: 'Registrations Open', message: 'Registrations Open for TechStorm 2026!', priority: 'High', isActive: true },
+            { title: 'Domain Launch', message: 'New Domain Launch: Aerospace Innovation', priority: 'Medium', isActive: true },
+            { title: 'Feature Update', message: 'Google Auth Integration Live on CREST', priority: 'Low', isActive: true }
+        ];
+        await Announcement.insertMany(announcements);
+
+        // 7. SEED SITE STATS
+        console.log('-> Updating Global Site Statistics...');
+        const stats = [
+            { label: 'activeProjects', value: '50', description: 'Total Live Student Projects' },
+            { label: 'members', value: '200', description: 'Active Club Members' },
+            { label: 'hackathonsHosted', value: '5', description: 'Major Hackathons Conducted' },
+            { label: 'eventsConducted', value: '12', description: 'Technical Events & Seminars' }
+        ];
+        await SiteStat.insertMany(stats);
+
+        // 8. SEED USERS
+        console.log('-> Injecting Initial Dummy Users...');
+        await User.insertMany([
+            { name: 'John Dev', email: 'john.dev@example.com', role: 'member', isVerified: true },
+            { name: 'Alice Hacker', email: 'alice.hx@example.com', role: 'member', isVerified: true }
+        ]);
+
+        console.log('🎉 INITIALIZATION COMPLETE. 100% of data successfully populated to MongoDB Atlas.');
         process.exit(0);
     } catch (err) {
-        console.error('Seeding Error:', err);
+        console.error('❌ FATAL SEED ERROR:', err);
         process.exit(1);
     }
 };
 
-// Execute Seeding
-seedData();
+seedDatabase();

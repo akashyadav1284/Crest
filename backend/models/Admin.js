@@ -5,6 +5,7 @@ const AdminSchema = new mongoose.Schema({
     hashedPassKey: { type: String, required: true },
     role: { type: String, default: 'admin' },
     accessLevel: { type: Number, default: 1 },
+    isActive: { type: Boolean, default: true },
     createdAt: { type: Date, default: Date.now }
 });
 
