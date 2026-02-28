@@ -22,10 +22,16 @@ export function TeamSection() {
             try {
                 const apiUrl = "http://localhost:5000/api";
                 const res = await fetch(`${apiUrl}/team`);
+                if (!res.ok) throw new Error("Server Error");
                 const data = await res.json();
-                setTeam(data);
+                if (Array.isArray(data)) {
+                    setTeam(data);
+                } else {
+                    setTeam([]);
+                }
             } catch (err) {
-                console.error("Failed to fetch team");
+                console.warn("Failed to fetch team, defaulting to empty", err);
+                setTeam([]);
             } finally {
                 setLoading(false);
             }

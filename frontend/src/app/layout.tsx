@@ -11,15 +11,18 @@ export const metadata: Metadata = {
   description: 'Robotics & Artificial Intelligence Club exploring Real-world Technology.',
 };
 
+import { WhatsAppButton } from '@/components/WhatsAppButton';
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className="font-inter bg-black text-white antialiased selection:bg-cyan-500/30">
         {children}
+        <WhatsAppButton />
       </body>
     </html>
   );

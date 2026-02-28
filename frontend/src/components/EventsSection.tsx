@@ -28,10 +28,17 @@ export function EventsSection() {
             try {
                 const apiUrl = "http://localhost:5000/api";
                 const res = await fetch(`${apiUrl}/events`);
+                if (!res.ok) throw new Error("Server Error");
                 const data = await res.json();
-                setEvents(data);
+                if (Array.isArray(data)) {
+                    setEvents(data);
+                } else {
+                    console.warn("API returned non-array data");
+                    setEvents([]);
+                }
             } catch (err) {
-                console.error("Failed to fetch events");
+                console.warn("Failed to fetch events, defaulting to empty", err);
+                setEvents([]);
             } finally {
                 setLoading(false);
             }

@@ -14,6 +14,7 @@ export function JoinForm() {
         const formData = new FormData(e.currentTarget);
         const requestData = {
             name: formData.get("name"),
+            registrationNumber: formData.get("registrationNumber"),
             email: formData.get("email"),
             department: formData.get("department"),
             interestDomain: formData.get("interestDomain"),
@@ -96,6 +97,17 @@ export function JoinForm() {
                                 required
                                 className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-magenta-500 focus:shadow-[0_0_15px_rgba(217,70,239,0.3)] transition-all"
                                 placeholder="xyz@gmail.com"
+                            />
+                        </div>
+
+                        <div className="space-y-1">
+                            <label className="text-xs uppercase tracking-widest text-white/50 font-mono">Registration Number</label>
+                            <input
+                                type="text"
+                                name="registrationNumber"
+                                required
+                                className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all"
+                                placeholder="e.g. 122XXXXX"
                             />
                         </div>
 

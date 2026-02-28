@@ -7,7 +7,7 @@ export function Footer() {
                 <div className="col-span-1 md:col-span-2 flex flex-col justify-between">
                     <div className="space-y-4 mb-8">
                         <div className="flex items-center gap-3">
-                            <img src="/crest-logo.png" alt="CREST" className="w-8 h-8 object-contain" />
+                            <img src="/crestlogo.png" alt="CREST" className="w-8 h-8 object-contain" />
                             <span className="text-2xl font-outfit font-bold tracking-widest text-white uppercase">CREST</span>
                         </div>
                         <p className="text-white/50 text-sm max-w-sm">

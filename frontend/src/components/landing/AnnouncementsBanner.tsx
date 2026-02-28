@@ -21,13 +21,13 @@ export function AnnouncementsBanner() {
                 const res = await fetch(`${API_URL}/api/announcements`);
                 if (res.ok) {
                     const data = await res.json();
-                    if (data && data.length > 0) {
+                    if (Array.isArray(data) && data.length > 0) {
                         setAnnouncement(data[0]); // Show the most recent active broadcast
                         setIsVisible(true);
                     }
                 }
             } catch (err) {
-                console.error("Failed to fetch announcements");
+                console.warn("Failed to fetch announcements", err);
             }
         };
 

@@ -21,13 +21,13 @@ export function HeroContent({ isBooted }: { isBooted: boolean }) {
                 const res = await fetch(`${API_URL}/api/homepage`);
                 if (res.ok) {
                     const data = await res.json();
-                    if (data) {
-                        setHeading(data.heading);
-                        setShowContent(data.showContent);
+                    if (data && typeof data === 'object' && !Array.isArray(data)) {
+                        setHeading(data.heading || "INNOVATION STUDIO PRESENTS");
+                        setShowContent(data.showContent !== undefined ? data.showContent : true);
                     }
                 }
             } catch (err) {
-                console.error("Failed to fetch homepage data");
+                console.warn("Failed to fetch homepage data", err);
             }
         };
         fetchContent();

@@ -23,10 +23,16 @@ export function AboutSection() {
             try {
                 const apiUrl = "http://localhost:5000/api";
                 const res = await fetch(`${apiUrl}/stats`);
+                if (!res.ok) throw new Error("Server Error");
                 const data = await res.json();
-                setStats(data);
+                if (Array.isArray(data)) {
+                    setStats(data);
+                } else {
+                    setStats([]);
+                }
             } catch (err) {
-                console.error("Failed to fetch stats");
+                console.warn("Failed to fetch stats, defaulting to empty", err);
+                setStats([]);
             }
         };
         fetchStats();

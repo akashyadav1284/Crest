@@ -64,12 +64,16 @@ export function DomainsSection() {
                 const res = await fetch(`${API_URL}/api/domains`);
                 if (res.ok) {
                     const data = await res.json();
-                    // Sort domains by order just in case
-                    data.sort((a: DomainItem, b: DomainItem) => a.order - b.order);
-                    setDomains(data);
+                    if (Array.isArray(data)) {
+                        // Sort domains by order just in case
+                        data.sort((a: DomainItem, b: DomainItem) => a.order - b.order);
+                        setDomains(data);
+                    } else {
+                        setDomains([]);
+                    }
                 }
             } catch (err) {
-                console.error("Failed to fetch domains");
+                console.warn("Failed to fetch domains", err);
             } finally {
                 setLoading(false);
             }

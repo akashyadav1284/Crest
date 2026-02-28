@@ -50,14 +50,14 @@ export function HudOverlay({ isBooted }: { isBooted: boolean }) {
     if (!isBooted) return null;
 
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, delay: 1 }}
-            className="fixed inset-0 pointer-events-none z-40 flex flex-col justify-between p-6 md:p-10 text-cyan-500 font-mono text-xs md:text-sm uppercase tracking-widest"
-        >
-            {/* Top Bar */}
-            <div className="flex justify-between items-start">
+        <>
+            {/* Scrollable Top HUD Text */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1.5, delay: 1 }}
+                className="absolute inset-x-0 top-0 pointer-events-none z-40 flex justify-between items-start p-6 md:p-10 text-cyan-500 font-mono text-xs md:text-sm uppercase tracking-widest pt-24 md:pt-28"
+            >
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
                         <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
@@ -73,38 +73,46 @@ export function HudOverlay({ isBooted }: { isBooted: boolean }) {
                         <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
-            {/* Frame Decorators */}
-            <div className="absolute top-0 left-0 w-32 h-32 border-t-2 border-l-2 border-cyan-500/30 opacity-50 m-6" />
-            <div className="absolute top-0 right-0 w-32 h-32 border-t-2 border-r-2 border-cyan-500/30 opacity-50 m-6" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 border-b-2 border-l-2 border-cyan-500/30 opacity-50 m-6" />
+            {/* Fixed HUD Overlays (Phase Tracker, Frame) */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1.5, delay: 1 }}
+                className="fixed inset-0 pointer-events-none z-30 font-mono uppercase tracking-widest hidden md:block"
+            >
+                {/* Frame Decorators */}
+                <div className="absolute top-0 left-0 w-32 h-32 border-t-2 border-l-2 border-cyan-500/30 opacity-50 m-6" />
+                <div className="absolute top-0 right-0 w-32 h-32 border-t-2 border-r-2 border-cyan-500/30 opacity-50 m-6" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 border-b-2 border-l-2 border-cyan-500/30 opacity-50 m-6" />
 
-            {/* Right Side Vertical Scroll Indicator */}
-            <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-6 items-end">
-                {PHASES.map((phase) => (
-                    <div key={phase.id} className="flex items-center gap-4">
-                        <motion.span
-                            animate={{
-                                opacity: activePhase === phase.id ? 1 : 0.3,
-                                textShadow: activePhase === phase.id ? "0 0 10px #22d3ee" : "none"
-                            }}
-                            className="text-cyan-400 font-bold hidden md:block"
-                        >
-                            PHASE {phase.id}
-                        </motion.span>
-                        <div className="relative flex items-center justify-center">
-                            <motion.div
-                                className={`w-1 h-8 bg-cyan-900 border border-cyan-800 ${activePhase === phase.id ? 'bg-cyan-400 shadow-[0_0_15px_#22d3ee]' : ''}`}
+                {/* Right Side Vertical Scroll Indicator */}
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-6 items-end">
+                    {PHASES.map((phase) => (
+                        <div key={phase.id} className="flex items-center gap-4">
+                            <motion.span
                                 animate={{
-                                    height: activePhase === phase.id ? 40 : 32,
-                                    backgroundColor: activePhase === phase.id ? "#22d3ee" : "#164e63"
+                                    opacity: activePhase === phase.id ? 1 : 0.3,
+                                    textShadow: activePhase === phase.id ? "0 0 10px #22d3ee" : "none"
                                 }}
-                            />
+                                className="text-cyan-400 font-bold hidden md:block"
+                            >
+                                PHASE {phase.id}
+                            </motion.span>
+                            <div className="relative flex items-center justify-center">
+                                <motion.div
+                                    className={`w-1 h-8 bg-cyan-900 border border-cyan-800 ${activePhase === phase.id ? 'bg-cyan-400 shadow-[0_0_15px_#22d3ee]' : ''}`}
+                                    animate={{
+                                        height: activePhase === phase.id ? 40 : 32,
+                                        backgroundColor: activePhase === phase.id ? "#22d3ee" : "#164e63"
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
-        </motion.div>
+                    ))}
+                </div>
+            </motion.div>
+        </>
     );
 }

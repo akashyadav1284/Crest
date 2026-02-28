@@ -16,10 +16,11 @@ router.get('/', auth, async (req, res) => {
 
 // POST Submit a join request (Public)
 router.post('/', async (req, res) => {
-    const { name, email, department, interestDomain } = req.body;
+    const { name, registrationNumber, email, department, interestDomain } = req.body;
 
     const request = new JoinRequest({
         name,
+        registrationNumber,
         email,
         department,
         interestDomain

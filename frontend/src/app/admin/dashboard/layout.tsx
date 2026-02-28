@@ -46,7 +46,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 className="w-64 bg-black/80 backdrop-blur-xl border-r border-white/5 flex flex-col items-center py-8 z-20 shadow-[5px_0_30px_rgba(0,0,0,0.5)]"
             >
                 <div className="flex flex-col items-center mb-12 gap-3 cursor-pointer" onClick={() => router.push('/')}>
-                    <img src="/crest-logo.png" alt="CREST" className="w-12 h-12 object-contain" />
+                    <img src="/crestlogo.png" alt="CREST" className="w-12 h-12 object-contain" />
                     <span className="text-xl font-outfit font-bold tracking-widest text-white mt-1 uppercase">Admin</span>
                 </div>
 

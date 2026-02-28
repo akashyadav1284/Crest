@@ -76,14 +76,25 @@ export function HackathonCard({
 
                 {/* Footer Action */}
                 <div className="mt-auto pt-6 border-t border-white/10">
-                    <Link href={`/hackathons/${id}`}>
-                        <button className="w-full relative group/btn overflow-hidden rounded-lg bg-cyan-500/10 border border-cyan-500 px-6 py-3 text-cyan-400 font-bold tracking-widest uppercase hover:text-black transition-colors duration-300 flex items-center justify-center gap-2">
-                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                Register Now <ArrowRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
-                            </span>
-                            <div className="absolute inset-0 h-full w-0 bg-cyan-500 transition-all duration-300 ease-out group-hover/btn:w-full z-0" />
-                        </button>
-                    </Link>
+                    {name.toLowerCase().includes("resurgence") ? (
+                        <a href="/resurgence-main/">
+                            <button className="w-full relative group/btn overflow-hidden rounded-lg bg-cyan-500/10 border border-cyan-500 px-6 py-3 text-cyan-400 font-bold tracking-widest uppercase hover:text-black transition-colors duration-300 flex items-center justify-center gap-2">
+                                <span className="relative z-10 flex items-center justify-center gap-2">
+                                    See Details <ArrowRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
+                                </span>
+                                <div className="absolute inset-0 h-full w-0 bg-cyan-500 transition-all duration-300 ease-out group-hover/btn:w-full z-0" />
+                            </button>
+                        </a>
+                    ) : (
+                        <Link href={`/hackathons/${id}`}>
+                            <button className="w-full relative group/btn overflow-hidden rounded-lg bg-cyan-500/10 border border-cyan-500 px-6 py-3 text-cyan-400 font-bold tracking-widest uppercase hover:text-black transition-colors duration-300 flex items-center justify-center gap-2">
+                                <span className="relative z-10 flex items-center justify-center gap-2">
+                                    Register Now <ArrowRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
+                                </span>
+                                <div className="absolute inset-0 h-full w-0 bg-cyan-500 transition-all duration-300 ease-out group-hover/btn:w-full z-0" />
+                            </button>
+                        </Link>
+                    )}
                 </div>
             </div>
         </motion.div>
