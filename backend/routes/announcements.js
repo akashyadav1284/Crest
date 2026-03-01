@@ -34,12 +34,12 @@ router.get('/all', auth, async (req, res) => {
 // @desc    Add a new announcement
 // @access  Private
 router.post('/', auth, async (req, res) => {
-    const { title, content, isActive } = req.body;
+    const { title, message, isActive } = req.body;
 
     try {
         const newAnnouncement = new Announcement({
             title,
-            content,
+            message,
             isActive: isActive !== undefined ? isActive : true
         });
 
@@ -55,14 +55,14 @@ router.post('/', auth, async (req, res) => {
 // @desc    Update an announcement
 // @access  Private
 router.put('/:id', auth, async (req, res) => {
-    const { title, content, isActive } = req.body;
+    const { title, message, isActive } = req.body;
 
     try {
         let announcement = await Announcement.findById(req.params.id);
         if (!announcement) return res.status(404).json({ msg: 'Announcement not found' });
 
         announcement.title = title || announcement.title;
-        announcement.content = content || announcement.content;
+        announcement.message = message || announcement.message;
         announcement.isActive = isActive !== undefined ? isActive : announcement.isActive;
 
         await announcement.save();

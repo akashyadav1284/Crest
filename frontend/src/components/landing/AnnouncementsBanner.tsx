@@ -7,7 +7,7 @@ import { AlertCircle, X } from "lucide-react";
 interface Announcement {
     _id: string;
     title: string;
-    content: string;
+    message: string;
 }
 
 export function AnnouncementsBanner() {
@@ -54,7 +54,7 @@ export function AnnouncementsBanner() {
                             {announcement.title}
                         </h4>
                         <p className="text-white/80 text-xs font-inter leading-relaxed">
-                            {announcement.content}
+                            {announcement.message}
                         </p>
                     </div>
                     <button

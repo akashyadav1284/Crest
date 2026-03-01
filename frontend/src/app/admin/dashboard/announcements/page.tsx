@@ -7,7 +7,7 @@ import { Plus, Trash2, Edit2, X, Save, Megaphone } from "lucide-react";
 interface Announcement {
     _id: string;
     title: string;
-    content: string;
+    message: string;
     isActive: boolean;
     createdAt: string;
 }
@@ -120,7 +120,7 @@ export default function AnnouncementsManager() {
                             </div>
                         </div>
 
-                        <p className="text-white/70 text-sm font-inter whitespace-pre-wrap">{ann.content}</p>
+                        <p className="text-white/70 text-sm font-inter whitespace-pre-wrap">{ann.message}</p>
 
                         <div className="mt-2 text-xs font-mono uppercase tracking-widest">
                             <span className={`px-2 py-1 rounded border ${ann.isActive ? 'border-green-500/50 text-green-400 bg-green-500/10' : 'border-red-500/50 text-red-400 bg-red-500/10'}`}>
@@ -153,7 +153,7 @@ export default function AnnouncementsManager() {
                                 </div>
                                 <div>
                                     <label className="block text-xs uppercase text-white/50 font-mono mb-1">Message Content</label>
-                                    <textarea required value={currentAnnounce.content || ''} onChange={e => setCurrentAnnounce({ ...currentAnnounce, content: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-yellow-500 outline-none" rows={4} placeholder="Warning: Subsystems will be down..." />
+                                    <textarea required value={currentAnnounce.message || ''} onChange={e => setCurrentAnnounce({ ...currentAnnounce, message: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-yellow-500 outline-none" rows={4} placeholder="Warning: Subsystems will be down..." />
                                 </div>
 
                                 <div className="flex items-center gap-3 mt-2">
